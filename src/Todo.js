@@ -1,7 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Todo.css"
 
 function Todo() {
+
+    const [text, setText] = useState("");
+    const [items, SetItems] = useState([]);
+
+    function handleChange(event) {
+        let t = event.target.value;
+
+        setText(t);
+
+    }
+    function addItem(event) {
+        event.preventDefault();
+
+        if (text) {
+            SetItems([...items, text]);
+            setText("");
+        }
+    }
 
     return (
         <div className="container">
@@ -9,15 +27,15 @@ function Todo() {
                 Todo
             </h1>
             <form action="">
-                <input type="text"></input>
-
-                <button type="submit" className="">Add</button>
+                <input type="text" onChange={handleChange} value={text}></input>
+                <button type="submit" className="" onClick={addItem}>Add</button>
 
             </form>
             <ul>
-                <li>
-                    Item
-                </li>
+                {items.map((item, index) => (
+
+                    <li key={index}>{item}</li>
+                ))}
             </ul>
         </div>
     )
