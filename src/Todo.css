@@ -1,4 +1,8 @@
-.container{
-    margin: auto;
-    max-width: 900px;
+.container {
+  margin: auto;
+  max-width: 900px;
+}
+
+.done {
+  text-decoration: line-through;
 }

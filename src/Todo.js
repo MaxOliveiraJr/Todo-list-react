@@ -1,24 +1,39 @@
 import React, { useState } from "react";
+import Item from "./Item"
+import TodoForm from "./TodoForm";
+import List from "./List";
 import "./Todo.css"
 
 function Todo() {
-
-    const [text, setText] = useState("");
     const [items, SetItems] = useState([]);
 
-    function handleChange(event) {
-        let t = event.target.value;
+    function onAddItem(text) {
 
-        setText(t);
 
+        let it = new Item(text);
+
+        SetItems([...items, it])
     }
-    function addItem(event) {
-        event.preventDefault();
 
-        if (text) {
-            SetItems([...items, text]);
-            setText("");
-        }
+    function onItemDeleted(item) {
+        let filteredItem = items.filter(it => it.id !== item.id)
+
+        SetItems(filteredItem);
+    }
+
+    function onDone(item) {
+
+        console.log(item)
+        let updateItems = items.map(it => {
+
+            if (it.id === item.id) {
+                
+                it.done = !it.done
+            }
+            return it;
+        })
+
+        SetItems(updateItems);
     }
 
     return (
@@ -26,17 +41,11 @@ function Todo() {
             <h1>
                 Todo
             </h1>
-            <form action="">
-                <input type="text" onChange={handleChange} value={text}></input>
-                <button type="submit" className="" onClick={addItem}>Add</button>
 
-            </form>
-            <ul>
-                {items.map((item, index) => (
+            <TodoForm onAddItem={onAddItem}></TodoForm>
 
-                    <li key={index}>{item}</li>
-                ))}
-            </ul>
+            <List onDone={onDone} v onItemDeleted={onItemDeleted} items={items}></List>
+
         </div>
     )
 }
