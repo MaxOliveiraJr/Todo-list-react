@@ -3,16 +3,18 @@ import Item from "./components/Item"
 import TodoForm from "./components/TodoForm";
 import List from "./components/List";
 import "./Todo.css"
+import Modal from "./components/Modal";
 
 const SAVED_ITEMS = "savedItems"
 
 function Todo() {
-    const [items, SetItems] = useState([]);
+    const [items, setItems] = useState([]);
+    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         let savedItems = JSON.parse(localStorage.getItem(SAVED_ITEMS));
         if (savedItems) {
-            SetItems(savedItems);
+            setItems(savedItems);
         }
     }, [])
 
@@ -29,13 +31,13 @@ function Todo() {
 
         let it = new Item(text);
 
-        SetItems([...items, it])
+        setItems([...items, it])
     }
 
     function onItemDeleted(item) {
         let filteredItem = items.filter(it => it.id !== item.id)
 
-        SetItems(filteredItem);
+        setItems(filteredItem);
     }
 
     function onDone(item) {
@@ -50,19 +52,23 @@ function Todo() {
             return it;
         })
 
-        SetItems(updateItems);
+        setItems(updateItems);
     }
 
     return (
         <div className="container">
-            <h1>
-                Todo
-            </h1>
+            <header>
+                <h1>
+                    Todo
+                </h1>
+                <button className="addButton" onClick={() => setShowModal(true)}>
+                    +
+                </button>
+            </header>
 
-            <TodoForm onAddItem={onAddItem}></TodoForm>
 
-            <List onDone={onDone} v onItemDeleted={onItemDeleted} items={items}></List>
-
+            <List onDone={onDone} onItemDeleted={onItemDeleted} items={items}></List>
+            {showModal && <Modal closedModal={setShowModal}> <TodoForm onAddItem={onAddItem}></TodoForm></Modal>}
         </div>
     )
 }
